@@ -38,8 +38,14 @@ header {
 }
 
 .nav-links a {
-    color: #fff;
-    text-decoration: none;
+    color: yellowgreen;
+    text-decoration: yellow;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: bisque;
+    text-decoration: yellow;
     font-weight: bold;
 }
 
@@ -80,8 +86,8 @@ header {
                 <h1>Gamevault</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#top-rated">Top Games</a></li>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="game_sorted.php">Top Games</a></li>
                 <li><a href="#top-char">Top Charecters</a></li>
                 <li><a href="#genres">Genres</a></li>
                 <li><a href="#community">Community</a></li>

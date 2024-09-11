@@ -27,7 +27,7 @@ $result_characters = $conn->query($sql_characters);
         <div class="hero-content">
             <h2>Discover & Rate Your Favorite Games</h2>
             <p>Join a community of gamers, share your thoughts, and find the next big hit.</p>
-            <a href="#sign-up" class="cta-button">Get Started</a>
+            <a href="game_sorted.php" class="cta-button">Get Started</a>
         </div>
     </section>
 

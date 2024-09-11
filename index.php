@@ -1,11 +1,6 @@
 <?php
 
-session_start();
-$conn = mysqli_connect('localhost', 'Tafsir', '', 'gamevault');
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+include "db_connect.php";
 
 // Fetching games
 $sql_games = "SELECT g.id, g.title, g.image_path FROM Games g";

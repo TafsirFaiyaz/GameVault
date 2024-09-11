@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Common Header</title>
     <style>
+
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
         
 header {
     background: #000;
@@ -82,8 +89,10 @@ header {
             </ul>
             
             <div class="search-container">
-                <input type="text" id="search-bar" placeholder="Search...">
-                <button type="submit" id="search-button">Search</button>
+                <form action="search_result.php" method="GET">
+                    <input type="text" id="search-bar" name="query" placeholder="Search for games...">
+                    <button type="submit" id="search-button">Search</button>
+                </form>
             </div>
         </nav>
     </header>

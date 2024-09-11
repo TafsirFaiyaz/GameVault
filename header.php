@@ -78,7 +78,7 @@ header {
                 <li><a href="#top-char">Top Charecters</a></li>
                 <li><a href="#genres">Genres</a></li>
                 <li><a href="#community">Community</a></li>
-                <li><a href="#sign-up">Sign Up</a></li>
+                <li><a href="./user_profile/user_profile.php">Profile</a></li>
             </ul>
             
             <div class="search-container">

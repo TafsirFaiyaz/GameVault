@@ -1,0 +1,66 @@
+.profile-container {
+    display: flex;
+    padding: 20px;
+}
+
+.left-section {
+    flex: 1;
+    text-align: center;
+    padding-right: 20px;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.username {
+    margin: 10px 0;
+    font-size: 24px;
+}
+
+.game-list-btn, .friend-list-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.right-section {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.stats-box {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.favorite-games {
+    margin-top: 20px;
+}
+
+.favorite-games h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.game-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.game-item {
+    flex: 1 1 30%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin: 10px;
+    text-align: center;
+}

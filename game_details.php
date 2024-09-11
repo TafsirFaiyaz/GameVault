@@ -29,6 +29,10 @@ $avg_rating = $avg_rating_result->fetch_assoc()['avg_rating'] ?? 'No ratings yet
 $user_rating_sql = "SELECT rating FROM ratings WHERE user_id = $userid AND game_id = $game_id";
 $user_rating_result = $conn->query($user_rating_sql);
 $user_rating = $user_rating_result->fetch_assoc()['rating'] ?? null;
+
+$user_game_status = "SELECT status FROM user_completed_list WHERE user_id = $userid AND game_id = $game_id";
+$user_game_status_result = $conn->query($user_game_status);
+$user_status = $user_game_status_result->fetch_assoc()['status'] ?? null;
 ?>
 
 

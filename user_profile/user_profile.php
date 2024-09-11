@@ -1,4 +1,7 @@
 <?php
+
+include 'db_connect.php';
+
 $user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
 
 // Fetch mean rating, completed games, and planned games

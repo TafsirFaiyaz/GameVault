@@ -1,10 +1,6 @@
 <?php
-$conn = mysqli_connect('localhost', 'Tafsir', '', 'gamevault');
-session_start();
+include 'db_connect.php';
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
 
 $userid = $_SESSION['user_id']; 
 $game_id = isset($_GET['game_id']) ? intval($_GET['game_id']) : 0;
@@ -30,9 +26,6 @@ $user_rating_sql = "SELECT rating FROM ratings WHERE user_id = $userid AND game_
 $user_rating_result = $conn->query($user_rating_sql);
 $user_rating = $user_rating_result->fetch_assoc()['rating'] ?? null;
 
-$user_game_status = "SELECT status FROM user_completed_list WHERE user_id = $userid AND game_id = $game_id";
-$user_game_status_result = $conn->query($user_game_status);
-$user_status = $user_game_status_result->fetch_assoc()['status'] ?? null;
 ?>
 
 
@@ -59,29 +52,58 @@ $user_status = $user_game_status_result->fetch_assoc()['status'] ?? null;
             <div class="game-description">
                 
 
-                <section class="rating-section">
-                    <div class="gamevault-rating">
-                        <h3>Gamevault Rating</h3>
-                        <div class="rating-score"><?php echo $avg_rating ? round($avg_rating, 1) : 'N/A'; ?>/5</div>
-                    </div>
+            <section class="rating-section">
+    <div class="gamevault-rating">
+        <h3>Gamevault Rating</h3>
+        <div class="rating-score"><?php echo $avg_rating ? round($avg_rating, 1) : 'N/A'; ?>/5</div>
 
-                    <div class="user-rating">
-                        <h3>Your Rating</h3>
-                        <?php if ($user_rating): ?>
-                            <p class="rating-score"><?php echo $user_rating; ?>/5</p>
-                        <?php else: ?>
-                            <p class="rating-score">Not Rated</p>
-                        <?php endif; ?>
+        <!-- Add to Playlist Button -->
+        <div class="playlist-section">
+            <?php
+            // Check if the user already added the game to their planned list
+            $check_playlist_sql = "SELECT * FROM user_planned_list WHERE user_id = $userid AND game_id = $game_id";
+            $playlist_result = $conn->query($check_playlist_sql);
 
-                        <!-- Form for submitting or updating user rating -->
-                        <form action="submit_rating.php" method="POST">
-                            <label for="rating">Rate this game (1-5):</label>
-                            <input type="number" id="rating" name="rating" min="1" max="5" value="<?php echo $user_rating ?? ''; ?>" required>
-                            <input type="hidden" name="game_id" value="<?php echo $game_id; ?>">
-                            <button type="submit"><?php echo $user_rating ? 'Update Rating' : 'Submit Rating'; ?></button>
-                        </form>
-                    </div>
-                </section>
+            if ($playlist_result->num_rows > 0) {
+                // Game is already in the user's playlist
+                echo "<p class='playlist-status'>Already added to Playlist</p>";
+            } else {
+                // Show the 'Add to Playlist' button
+                echo "
+                <form action='add_to_playlist.php' method='POST'>
+                    <input type='hidden' name='game_id' value='$game_id'>
+                    <button type='submit' class='playlist-button'>Add to Playlist</button>
+                </form>";
+            }
+            ?>
+        </div>
+    </div>
+
+
+            <div class="user-rating">
+                <h3>Your Rating</h3>
+                <?php if ($user_rating): ?>
+                    <p class="rating-score"><?php echo $user_rating; ?>/5</p>
+                <?php else: ?>
+                    <p class="rating-score">Not Rated</p>
+                <?php endif; ?>
+
+                <!-- Rating Form with Select Dropdown -->
+                <form action="submit_rating.php" method="POST" class="rating-form">
+                    <label for="rating">Rate this game:</label>
+                    <select id="rating" name="rating" required>
+                        <option value="1" <?php echo ($user_rating == 1) ? 'selected' : ''; ?>>1 - Very Bad</option>
+                        <option value="2" <?php echo ($user_rating == 2) ? 'selected' : ''; ?>>2 - Bad</option>
+                        <option value="3" <?php echo ($user_rating == 3) ? 'selected' : ''; ?>>3 - Average</option>
+                        <option value="4" <?php echo ($user_rating == 4) ? 'selected' : ''; ?>>4 - Good</option>
+                        <option value="5" <?php echo ($user_rating == 5) ? 'selected' : ''; ?>>5 - Very Good</option>
+                    </select>
+                    <input type="hidden" name="game_id" value="<?php echo $game_id; ?>">
+                    <button type="submit" class="rating-submit"><?php echo $user_rating ? 'Update Rating' : 'Submit Rating'; ?></button>
+                </form>
+            </div>
+        </section>
+
                 
 
                 <h2><?php echo $game['title']; ?></h2>

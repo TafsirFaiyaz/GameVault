@@ -7,7 +7,7 @@ $sql_games = "SELECT g.id, g.title, g.image_path FROM Games g";
 $result_games = $conn->query($sql_games);
 
 // Fetching characters
-$sql_characters = "SELECT c.name, c.image_path FROM Characters c";
+$sql_characters = "SELECT c.id, c.name, c.image_path FROM Characters c";
 $result_characters = $conn->query($sql_characters);
 ?>
 
@@ -70,24 +70,28 @@ $result_characters = $conn->query($sql_characters);
     </div>
 </section>
 
-    <!-- Top Rated Characters Section -->
-    <section id="top-char" class="top-rated">
-        <h2>Top Rated Characters</h2>
-        <div class="games-container">
-            <?php
-            if ($result_characters->num_rows > 0) {
-                while ($row = $result_characters->fetch_assoc()) {
-                    echo "<div class='game-item'>";
-                    echo "<img src='" . $row['image_path'] . "' alt='" . $row['name'] . "'>";
-                    echo "<p>" . $row['name'] . "</p>";
-                    echo "</div>";
-                }
-            } else {
-                echo "<p>No characters available.</p>";
+<!-- Top Rated Characters Section -->
+<section id="top-char" class="top-rated">
+    <h2>Top Rated Characters</h2>
+    <div class="games-container">
+        <?php
+        if ($result_characters->num_rows > 0) {
+            while ($row = $result_characters->fetch_assoc()) {
+                echo "<div class='game-item'>";
+                // Correct the URL for character details page
+                echo "<a href='character_details.php?id=" . $row['id'] . "'>";
+                echo "<img src='" . $row['image_path'] . "' alt='" . $row['name'] . "'>";
+                echo "<p>" . $row['name'] . "</p>";
+                echo "</a>";
+                echo "</div>";
             }
-            ?>
-        </div>
-    </section>
+        } else {
+            echo "<p>No characters available.</p>";
+        }
+        ?>
+    </div>
+</section>
+
 
     <section id="genres" class="genres">
         <h2>Explore by Genre</h2>

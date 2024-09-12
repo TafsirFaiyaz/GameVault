@@ -32,47 +32,94 @@ body {
 }
 
 /* Games Section */
+/* Top Rated Section */
 .top-rated {
     padding: 60px 20px;
     text-align: center;
+    background-color: #f0f0f5;  /* Light background to distinguish the section */
 }
 
+.top-rated h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+/* Games Container */
 .games-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;  /* Increase gap for better spacing */
     justify-content: center;
     padding: 20px 0;
 }
 
+/* Game Item */
 .game-item {
-    width: 20%;
-    height: 400px;
-    background-color: #f7f7f7;
+    width: 18%;  /* Adjusted width for better layout */
+    height: auto;
+    background-color: #ffffff;  /* White background for contrast */
     text-align: center;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);  /* Softer, deeper shadow */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
+/* Hover effect for game items */
+.game-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2);
+}
 
-
+/* Game Image */
 .game-item img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    width: 100%;
+    height: 350px;  /* Fixed height to ensure uniformity */
+    object-fit: cover;  /* Ensure the image fills the area without distortion */
     border-radius: 10px;
+    margin-bottom: 15px;
 }
 
+/* Game Title */
+.game-item p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #444;
+    margin: 0;
+    padding: 0;
+}
 
+.game-item:hover p {
+    color: #ff6b6b;  /* Change the text color on hover */
+}
+
+/* Links */
 a {
     text-decoration: none;
+    color: inherit;
+  /* Ensures the text color is inherited from the parent */
 }
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .game-item {
+        width: 45%;  /* Adjust width on smaller screens */
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-item {
+        width: 90%;  /* Stack items on very small screens */
+    }
+}
+
 
 /* Optional: Style anchor tags on hover */
 a:hover {

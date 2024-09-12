@@ -44,10 +44,13 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
             margin: 0;            
         }
 
+        .content-wrapper{
+            padding: 20px;
+        }
 
         /* Form Sorting Option Styling */
         #sort-form {
-            padding: 20px;
+
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -69,7 +72,7 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
 
         /* Table Styling */
         table {
-            padding: 20px;
+
             width: 100%;
             border-collapse: collapse;
             background-color: #2c2c2c;

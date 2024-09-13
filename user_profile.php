@@ -1,29 +1,36 @@
 <?php
-
 include 'db_connect.php';
 
-$user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
+// Assuming user ID is stored in session
+$user_id = $_SESSION['user_id']; 
 
-// Fetch mean rating, completed games, and planned games
-// Query 1: Fetch mean rating and count of completed games
-$query = "SELECT AVG(rating) as mean_rating, COUNT(user_id) as completed_games FROM ratings WHERE user_id = $user_id";
+// Query to fetch mean rating, completed games, planned games, profile image, and username
+$query = "
+    SELECT 
+        AVG(rating) as mean_rating, 
+        COUNT(user_id) as completed_games,
+        (SELECT COUNT(user_id) FROM user_planned_list WHERE user_id = $user_id AND game_id NOT IN (SELECT game_id FROM ratings WHERE user_id = $user_id)) as planned_games,
+        profile_image,
+        username
+    FROM ratings 
+    JOIN users ON ratings.user_id = users.id
+    WHERE ratings.user_id = $user_id
+";
+
+$query2 = "SELECT username, profile_image FROM users where id = $user_id";
+$result2 = mysqli_query($conn, $query2);
+$data2 = mysqli_fetch_assoc($result2);
+
 $result = mysqli_query($conn, $query);
 $data = mysqli_fetch_assoc($result);
 
 $mean_rating = $data['mean_rating'];
 $completed_games = $data['completed_games'];
+$planned_games = $data['planned_games'];
+$profile_image = $data2['profile_image'];
+$username = $data2['username'];
 
-// Query 2: Fetch count of planned games excluding those already rated (completed)
-$query2 = "
-    SELECT COUNT(user_id) as planned_games 
-    FROM user_planned_list 
-    WHERE user_id = $user_id 
-    AND game_id NOT IN (SELECT game_id FROM ratings WHERE user_id = $user_id)
-";
-$result2 = mysqli_query($conn, $query2);
-$data2 = mysqli_fetch_assoc($result2);
 
-$planned_games = $data2["planned_games"];
 
 
 
@@ -41,17 +48,20 @@ $planned_games = $data2["planned_games"];
     <link rel="stylesheet" href="user_profile_styles.css">
 </head>
 <body>
-
+    
     <?php include "header.php"; ?>
  
+
     <div class="profile-container">
         <div class="left-section">
-            <img src="../Assets/Charecters/arthur.webp" alt="Profile Picture" class="profile-pic">
-            <h2 class="username">User Name</h2>
+            <!-- Display the profile image -->
+            <img src="Assets/user_image/<?php echo htmlspecialchars($profile_image); ?>" alt="Profile Picture" class="profile-pic">
+            <!-- Display the username -->
+            <h2 class="username"><?php echo htmlspecialchars($username); ?></h2>
             <button class="game-list-btn">Game List</button>
             <button class="friend-list-btn">Friend List</button>
         </div>
-
+    </div>
 
 <div class="right-section">
     <div class="stats-box">

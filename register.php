@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,11 +65,12 @@
 <body>
     <div class="register-container">
         <h1>Create an Account</h1>
-        <form action="register_process.php" method="POST">
+        <form action="register_process.php" method="POST" enctype="multipart/form-data">
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <input type="file" name="profile_image" accept="image/*">
             <button type="submit">Register</button>
         </form>
         <p>Already have an account? <a href="login.php">Login</a></p>

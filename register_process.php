@@ -1,19 +1,7 @@
 <?php
-// Start session to handle messages (optional)
-session_start();
+include "db_connect.php";
 
-// Connect to the database
-$conn = mysqli_connect('localhost', 'Tafsir', '', 'gamevault');
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Collect the form data and sanitize
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
@@ -25,36 +13,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Hash the password for security
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    // Check if file is uploaded
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+        $fileTmpPath = $_FILES['profile_image']['tmp_name'];
+        $fileName = $_FILES['profile_image']['name'];
+        $fileSize = $_FILES['profile_image']['size'];
+        $fileType = $_FILES['profile_image']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
 
-    // Check if the username or email already exists
-    $check_query = "SELECT * FROM users WHERE email = '$email' OR username = '$username' LIMIT 1";
-    $result = mysqli_query($conn, $check_query);
-    
-    if (mysqli_num_rows($result) > 0) {
-        // Fetch the existing data
-        $row = mysqli_fetch_assoc($result);
-        if ($row['username'] == $username) {
-            echo "Username is already taken.";
-        }
-        if ($row['email'] == $email) {
-            echo "Email is already registered.";
+        // Define allowed file extensions
+        $allowedExts = array('jpg', 'jpeg', 'png', 'gif');
+        if (in_array($fileExtension, $allowedExts)) {
+            $uploadFileDir = './Assets/user_image/';
+            $dest_file = $uploadFileDir . $fileName;
+
+            // Ensure the directory exists
+            if (!is_dir($uploadFileDir)) {
+                mkdir($uploadFileDir, 0755, true);
+            }
+
+            // Move the file to the desired directory
+            if (move_uploaded_file($fileTmpPath, $dest_file)) {
+                echo "File is successfully uploaded.";
+            } else {
+                echo "There was an error uploading the file.";
+            }
+        } else {
+            echo "Unsupported file extension.";
         }
     } else {
-        // Insert the data into the users table
-        $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$hashed_password')";
-        
-        if (mysqli_query($conn, $sql)) {
-            // Registration successful
-            echo "Registration successful. <a href='login.php'>Login here</a>";
-        } else {
-            // Error inserting the data
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
+        echo "No file uploaded or file upload error.";
+    }
+
+    // Hash the password and insert user data into database
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    $query = "INSERT INTO users (username, email, password, profile_image) VALUES ('$username', '$email', '$hashedPassword', '$fileName')";
+    if (mysqli_query($conn, $query)) {
+        echo "Registration successful. <a href='login.php'>Login here</a>";
+    } else {
+        echo "Error: " . mysqli_error($conn);
     }
 }
-
-// Close the connection
-mysqli_close($conn);
 ?>
+

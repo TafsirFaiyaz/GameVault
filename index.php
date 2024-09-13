@@ -12,7 +12,12 @@ $sql_games = "    SELECT g.id, g.title, g.image_path, AVG(r.rating) AS avg_ratin
 $result_games = $conn->query($sql_games);
 
 // Fetching characters
-$sql_characters = "SELECT c.id, c.name, c.image_path FROM Characters c";
+$sql_characters = "SELECT c.id, c.name, c.image_path, AVG(r.rating) AS avg_rating
+    FROM characters c
+    LEFT JOIN character_ratings r ON c.id = r.user_id
+    GROUP BY c.id, c.name, c.image_path
+    ORDER BY avg_rating DESC
+    LIMIT 4";
 $result_characters = $conn->query($sql_characters);
 ?>
 

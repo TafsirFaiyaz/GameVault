@@ -3,7 +3,12 @@
 include "db_connect.php";
 
 // Fetching games
-$sql_games = "SELECT g.id, g.title, g.image_path FROM Games g";
+$sql_games = "    SELECT g.id, g.title, g.image_path, AVG(r.rating) AS avg_rating
+    FROM Games g
+    LEFT JOIN ratings r ON g.id = r.game_id
+    GROUP BY g.id, g.title, g.image_path
+    ORDER BY avg_rating DESC
+    LIMIT 4";
 $result_games = $conn->query($sql_games);
 
 // Fetching characters

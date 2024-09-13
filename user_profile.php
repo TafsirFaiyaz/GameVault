@@ -1,10 +1,11 @@
 <?php
 
-include '../db_connect.php';
+include 'db_connect.php';
 
 $user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
 
 // Fetch mean rating, completed games, and planned games
+// Query 1: Fetch mean rating and count of completed games
 $query = "SELECT AVG(rating) as mean_rating, COUNT(user_id) as completed_games FROM ratings WHERE user_id = $user_id";
 $result = mysqli_query($conn, $query);
 $data = mysqli_fetch_assoc($result);
@@ -12,11 +13,18 @@ $data = mysqli_fetch_assoc($result);
 $mean_rating = $data['mean_rating'];
 $completed_games = $data['completed_games'];
 
-$query2 = "SELECT COUNT(user_id) as planned_games FROM user_planned_list WHERE user_id = $user_id";
+// Query 2: Fetch count of planned games excluding those already rated (completed)
+$query2 = "
+    SELECT COUNT(user_id) as planned_games 
+    FROM user_planned_list 
+    WHERE user_id = $user_id 
+    AND game_id NOT IN (SELECT game_id FROM ratings WHERE user_id = $user_id)
+";
 $result2 = mysqli_query($conn, $query2);
 $data2 = mysqli_fetch_assoc($result2);
 
-$planned_games = $data2["planned_games"]
+$planned_games = $data2["planned_games"];
+
 
 
 // Fetch favorite games
@@ -34,7 +42,7 @@ $planned_games = $data2["planned_games"]
 </head>
 <body>
 
-    <?php include "../header.php"; ?>
+    <?php include "header.php"; ?>
  
     <div class="profile-container">
         <div class="left-section">
@@ -61,6 +69,7 @@ $planned_games = $data2["planned_games"]
         </div>
     </div>
 -->
+    <?php include "footer.php"?>
 
 </body>
 </html>

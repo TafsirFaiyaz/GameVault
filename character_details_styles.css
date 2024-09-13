@@ -15,7 +15,7 @@ a:hover {
     text-decoration: underline;
 }
 
-.game-details {
+.character-details {
     padding: 20px;
     background-color: #1f1f1f;
     max-width: 1200px;
@@ -24,7 +24,7 @@ a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.game-info {
+.character-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,7 +34,7 @@ a:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.game-info img {
+.character-info img {
     max-width: 500px;
     height: 500px;
     border-radius: 10px;
@@ -42,26 +42,22 @@ a:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.game-description {
-    margin-left: 20px;
-    max-width: 600px;
+.character-description {
+    margin: 20px 0; /* Adjust top and bottom margin to provide more vertical spacing */
+    padding: 10px 20px; /* Add padding inside the div for better text spacing */
+    color: #cccccc;
+    line-height: 1.6; /* Increase line height for better readability */
 }
 
-.game-description h2 {
-    margin-top: 0;
-    text-align: center;
+.character-description h2, h3 {
     margin-top: 15px;
+    text-align: center;
     color: #ff9900;
 }
 
-.game-description p {
+.character-description p {
     margin: 10px 0;
     color: #d4d4d4;
-}
-
-.game-description .details div {
-    margin-bottom: 10px;
-    color: #cccccc;
 }
 
 .details strong {
@@ -78,12 +74,14 @@ a:hover {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    margin-left: 650px;
 }
 
 .rating-section .gamevault-rating,
 .rating-section .user-rating {
     flex: 1;
     text-align: center;
+    
 }
 
 .rating-section h3 {
@@ -138,9 +136,6 @@ a:hover {
     background-color: #ff7700;
 }
 
-/* Playlist Button */
-
-
 /* Footer */
 footer {
     background-color: #111;
@@ -158,40 +153,3 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
-
-
-/* Playlist Section */
-.playlist-section {
-    margin-top: 20px;
-    margin-left: 0px;
-    text-align: center; /* Center the button */
-}
-
-.playlist-button {
-    padding: 12px 30px;
-    font-size: 1em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #ff4500;
-    border: none;
-    border-radius: 50px; /* Rounded button for a modern look */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Button shadow for depth */
-}
-
-.playlist-button:hover {
-    background-color: #ff7700;
-    transform: translateY(-2px); /* Adds a subtle lift effect on hover */
-}
-
-/* For already added to playlist status */
-.playlist-status {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #ff0000;
-    margin-top: 10px;
-    
-}
-
-

@@ -1,31 +1,35 @@
 <?php
 
 include "db_connect.php";
-// For Top Games
+// Assuming you have the logged-in user_id
+$user_id = $_SESSION['user_id']; // or however you're managing sessions
+
 
 $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'top';
 
-
 if ($sortOption == 'top') {
-   $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating 
+   $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating, COUNT(ratings.user_id) as total_user, 
+                         ur.rating as user_rating
                   FROM games 
                   LEFT JOIN ratings ON games.id = ratings.game_id 
+                  LEFT JOIN ratings as ur ON games.id = ur.game_id AND ur.user_id = $user_id
                   GROUP BY games.id 
                   ORDER BY avg_rating DESC LIMIT 10";
 
 } else if ($sortOption == 'popular') {
-   $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating,  count(ratings.user_id) as total_user 
+   $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating, COUNT(ratings.user_id) as total_user, 
+                         ur.rating as user_rating
                   FROM games 
                   LEFT JOIN ratings ON games.id = ratings.game_id 
+                  LEFT JOIN ratings as ur ON games.id = ur.game_id AND ur.user_id = $user_id
                   GROUP BY games.id 
                   ORDER BY total_user DESC LIMIT 10";
 }
 
 $gamesResult = mysqli_query($conn, $gamesQuery);
 
-
-
 ?>
+
 
 
 <!DOCTYPE html>
@@ -50,7 +54,6 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
 
         /* Form Sorting Option Styling */
         #sort-form {
-
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -72,7 +75,6 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
 
         /* Table Styling */
         table {
-
             width: 100%;
             border-collapse: collapse;
             background-color: #2c2c2c;
@@ -121,6 +123,26 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
             background-color: #3b3b3b;
         }
 
+        /* Style for clickable game title */
+        a.game-title-link {
+            color: #00aaff; /* Light blue color for the link */
+            text-decoration: none; /* Remove the underline */
+            font-weight: bold; /* Make the title bold */
+            transition: color 0.3s ease; /* Smooth color transition on hover */
+        }
+
+        /* Hover effect for the clickable game title */
+        a.game-title-link:hover {
+            color: #ffaa00; /* Change color to orange on hover */
+            text-decoration: underline; /* Underline the title when hovered */
+        }
+
+        /* Active/visited state of the link */
+        a.game-title-link:visited {
+            color: #66bbff; /* Slightly different color for visited links */
+        }
+
+
         /* Responsive Table for Mobile Devices */
         @media screen and (max-width: 768px) {
             table, thead, tbody, th, td, tr {
@@ -145,9 +167,6 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
                 font-weight: bold;
             }
         }
-
-
-
     </style>
 </head>
 
@@ -170,27 +189,47 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
     <table>
         <thead>
             <tr>
+                <th>Rank</th>
                 <th>Image</th>
                 <th>Title</th>
                 <th>Gamevault Rating</th>
                 <th>User Rating</th>
+                <th>Total Players</th>
             </tr>
         </thead>
         <tbody>
-            <?php while ($row = mysqli_fetch_assoc($gamesResult)): ?>
-            <tr>
-                <td data-label="Image"><img src="<?php echo $row['image_path']; ?>" alt="Game Image"></td>
-                <td data-label="Title"><?php echo $row['title']; ?></td>
-                <td data-label="Gamevault Rating"><?php echo number_format($row['avg_rating'], 1); ?></td>
-                <td data-label="User Rating"><?php // Fetch and display user rating ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
+    <?php 
+    $rank = 1; // Initialize rank counter
+    while ($row = mysqli_fetch_assoc($gamesResult)): ?>
+    <tr>
+        <td data-label="Rank"><?php echo $rank++; ?></td>
+        <td data-label="Image"><img src="<?php echo $row['image_path']; ?>" alt="Game Image"></td>
+        <td data-label="Title">
+            <a href="game_details.php?game_id=<?php echo $row['id']; ?>" class="game-title-link">
+                <?php echo $row['title']; ?>
+            </a>
+        </td>
+        </td>
+        <td data-label="Gamevault Rating"><?php echo number_format($row['avg_rating'], 1); ?></td>
+        <td data-label="User Rating">
+            <?php 
+            if ($row['user_rating']) {
+                echo number_format($row['user_rating'], 1); 
+            } else {
+                echo "Not Rated";
+            }
+            ?>
+        </td>
+        <td data-label="Total Players"><?php echo $row['total_user']; ?></td>
+    </tr>
+    <?php endwhile; ?>
+</tbody>
+
+
     </table>
 </div>
 
 <?php include "footer.php"?>
-
 
 </body>
 </html>

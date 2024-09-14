@@ -7,6 +7,7 @@ $user_id = $_SESSION['user_id']; // or however you're managing sessions
 
 $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'top';
 
+// Query to get top-rated, most popular, or upcoming games
 if ($sortOption == 'top') {
    $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating, COUNT(ratings.user_id) as total_user, 
                          ur.rating as user_rating
@@ -24,9 +25,21 @@ if ($sortOption == 'top') {
                   LEFT JOIN ratings as ur ON games.id = ur.game_id AND ur.user_id = $user_id
                   GROUP BY games.id 
                   ORDER BY total_user DESC LIMIT 10";
+
+} else if ($sortOption == 'upcoming') {
+   $currentDate = date('Y-m-d');
+   $gamesQuery = "SELECT games.*, AVG(ratings.rating) as avg_rating, COUNT(ratings.user_id) as total_user, 
+                         ur.rating as user_rating
+                  FROM games 
+                  LEFT JOIN ratings ON games.id = ratings.game_id 
+                  LEFT JOIN ratings as ur ON games.id = ur.game_id AND ur.user_id = $user_id
+                  WHERE games.release_date > '$currentDate'
+                  GROUP BY games.id 
+                  ORDER BY games.release_date ASC LIMIT 10";
 }
 
 $gamesResult = mysqli_query($conn, $gamesQuery);
+
 
 ?>
 
@@ -182,6 +195,7 @@ $gamesResult = mysqli_query($conn, $gamesQuery);
         <select name="sort" id="sort-options" onchange="document.getElementById('sort-form').submit()">
             <option value="top" <?php if ($sortOption == 'top') echo 'selected'; ?>>Top Games</option>
             <option value="popular" <?php if ($sortOption == 'popular') echo 'selected'; ?>>Most Popular</option>
+            <option value="upcoming" <?php if ($sortOption == 'upcoming') echo 'selected'; ?>>Upcoming Games</option>
         </select>
     </form>
 

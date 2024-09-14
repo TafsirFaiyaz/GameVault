@@ -1,66 +1,165 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    color: #e0e0e0;
+    background-color: #121212;
+    margin: 0;
+    padding: 0;
+}
+
+/* Profile Container */
 .profile-container {
     display: flex;
+    justify-content: space-between;
     padding: 20px;
 }
 
+/* Left Section */
 .left-section {
     flex: 1;
     text-align: center;
-    padding-right: 20px;
 }
 
 .profile-pic {
-    width: 150px;
-    height: 150px;
-
+    border-radius: 50%;
+    width: 300px; /* Increased size */
+    height: 300px; /* Increased size */
+    border: 3px solid #444;
+    object-fit: cover;
 }
 
 .username {
-    margin: 10px 0;
-    font-size: 24px;
+    color: #fff;
+    font-size: 28px; /* Increased size */
+    margin-top: 10px;
 }
 
 .game-list-btn, .friend-list-btn {
     display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
+    margin: 10px auto;
+    padding: 12px 24px; /* Increased padding */
     border: none;
+    background-color: #333;
+    color: #fff;
+    font-size: 18px; /* Increased font size */
     cursor: pointer;
 }
 
+.game-list-btn:hover, .friend-list-btn:hover {
+    background-color: #555;
+}
+
+/* Right Section */
 .right-section {
     flex: 2;
-    padding-left: 20px;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .stats-box {
-    border: 1px solid #ddd;
-    padding: 15px;
+    background-color: #2c2c2c;
+    padding: 20px; /* Increased padding */
+    border-radius: 8px;
     margin-bottom: 20px;
-    background-color: #f9f9f9;
 }
 
-.favorite-games {
-    margin-top: 20px;
+.stats-box p {
+    margin: 12px 0; /* Increased margin */
+    color: #ccc;
 }
 
-.favorite-games h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+.stats-box span {
+    color: #fff;
 }
 
-.game-grid {
+/* Favourite Games Section */
+.favourite-games {
+    background-color: #2c2c2c;
+    padding: 20px; /* Increased padding */
+    border-radius: 8px;
+    margin-top: 20px; /* Added margin to separate from stats box */
+}
+
+.favourite-games h3 {
+    color: #fff;
+    display: inline-block;
+    margin: 0;
+    font-size: 24px; /* Increased font size */
+}
+
+.favourite-games .edit-btn {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px 20px; /* Increased padding */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Increased font size */
+    margin-left: 10px;
+    text-align: center;
+}
+
+.favourite-games .edit-btn:hover {
+    background-color: #777;
+}
+
+.favourite-games-list {
     display: flex;
     flex-wrap: wrap;
+    gap: 15px; /* Increased gap */
 }
 
-.game-item {
-    flex: 1 1 30%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin: 10px;
+.favourite-game-item {
+    background-color: #333;
+    padding: 15px; /* Increased padding */
+    border-radius: 8px;
     text-align: center;
+    flex: 1 1 calc(20% - 10px); /* Adjusted size for more items per row */
+    max-width: 200px; /* Set a max width */
+}
+
+.favourite-game-item img {
+    border-radius: 4px;
+    max-width: 150px; /* Increased size */
+    max-height: 150px; /* Increased size */
+}
+
+.favourite-game-item p {
+    color: #e0e0e0;
+    margin-top: 10px;
+    font-size: 16px; /* Increased font size */
+}
+
+
+/* Favourite Games Section */
+.favourite-games {
+    background-color: #2c2c2c;
+    padding: 20px; /* Increased padding */
+    border-radius: 8px;
+    margin-top: 20px; /* Added margin to separate from stats box */
+}
+
+.favourite-games h3 {
+    color: #fff;
+    display: inline-block;
+    margin: 0;
+    font-size: 24px; /* Increased font size */
+}
+
+.favourite-games .edit-btn {
+    display: inline-block; /* Ensures it acts as a button */
+    background-color: #555;
+    color: #fff;
+    text-decoration: none; /* Removes underline from link */
+    padding: 10px 20px; /* Increased padding */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Increased font size */
+    margin-left: 10px;
+    text-align: center;
+}
+
+.favourite-games .edit-btn:hover {
+    background-color: #777;
 }

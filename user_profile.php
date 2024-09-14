@@ -17,7 +17,7 @@ $query = "
     WHERE ratings.user_id = $user_id
 ";
 
-$query2 = "SELECT username, profile_image FROM users where id = $user_id";
+$query2 = "SELECT username, profile_image FROM users WHERE id = $user_id";
 $result2 = mysqli_query($conn, $query2);
 $data2 = mysqli_fetch_assoc($result2);
 
@@ -30,13 +30,19 @@ $planned_games = $data['planned_games'];
 $profile_image = $data2['profile_image'];
 $username = $data2['username'];
 
-
-
-
-
-// Fetch favorite games
-//$fav_games_query = "SELECT game_name FROM favorite_games WHERE user_id = $user_id";
-//$fav_games_result = mysqli_query($conn, $fav_games_query);
+// Query to fetch favorite games
+$query3 = "
+    SELECT g.image_path, g.title 
+    FROM favourite_games fg
+    JOIN games g ON fg.game_id = g.id
+    WHERE fg.user_id = $user_id
+    LIMIT 5
+";
+$result3 = mysqli_query($conn, $query3);
+$favourite_games = [];
+while ($row = mysqli_fetch_assoc($result3)) {
+    $favourite_games[] = $row;
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +57,6 @@ $username = $data2['username'];
     
     <?php include "header.php"; ?>
  
-
     <div class="profile-container">
         <div class="left-section">
             <!-- Display the profile image -->
@@ -61,26 +66,32 @@ $username = $data2['username'];
             <button class="game-list-btn">Game List</button>
             <button class="friend-list-btn">Friend List</button>
         </div>
-    </div>
+        
+        <div class="right-section">
+            <div class="stats-box">
+                <p>Mean Rating: <span id="mean-rating"><?php echo round($mean_rating, 2); ?></span></p>
+                <p>Games Completed: <span id="completed-games"><?php echo $completed_games; ?></span></p>
+                <p>Plans to Play: <span id="planned-games"><?php echo $planned_games; ?></span></p>
+            </div>
+            
+            <!-- New Section: Favourite Games -->
+            <div class="favourite-games">
+                <h3>Favourite Games</h3>
+                <a href="favourite_games_listing.php" class="edit-btn">Edit</a> <!-- Updated button to link -->
+                <div class="favourite-games-list">
+                    <?php foreach ($favourite_games as $game): ?>
+                        <div class="favourite-game-item">
+                            <img src="<?php echo htmlspecialchars($game['image_path']); ?>" alt="Game Image" width="100">
+                            <p><?php echo htmlspecialchars($game['title']); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
 
-<div class="right-section">
-    <div class="stats-box">
-        <p>Mean Rating: <span id="mean-rating"><?php echo round($mean_rating, 2); ?></span></p>
-        <p>Games Completed: <span id="completed-games"><?php echo $completed_games; ?></span></p>
-        <p>Plans to Play: <span id="planned-games"><?php echo $planned_games; ?></span></p>
-    </div>
-<!--
-    <div class="favorite-games">
-        <h3>Favorite Games</h3>
-        <div class="game-grid">
-            <?php // while ($game = mysqli_fetch_assoc($fav_games_result)) { ?>
-                <div class="game-item"><?php //echo $game['game_name']; ?></div>
-            <?php //} ?>
+            
         </div>
     </div>
--->
-    <?php include "footer.php"?>
-
+    <?php include "footer.php"; ?>
 </body>
 </html>
 

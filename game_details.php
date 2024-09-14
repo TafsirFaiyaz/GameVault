@@ -69,15 +69,15 @@ $playlist_result = $conn->query($check_playlist_sql);
             <div class="game-description">
 
             <div class="playlist-section">
-        <?php if ($playlist_result->num_rows > 0): ?>
-            <p class="playlist-status">Already added to Playlist</p>
-        <?php else: ?>
-            <form action="add_to_playlist.php" method="POST">
-                <input type="hidden" name="game_id" value="<?php echo $game_id; ?>">
-                <button type="submit" class="playlist-button">Add to Playlist</button>
-            </form>
-        <?php endif; ?>
-    </div>
+                <?php if ($playlist_result->num_rows > 0): ?>
+                    <p class="playlist-status">Already added to Playlist</p>
+                <?php else: ?>
+                    <form action="add_to_playlist.php" method="POST">
+                        <input type="hidden" name="game_id" value="<?php echo $game_id; ?>">
+                        <button type="submit" class="playlist-button">Add to Playlist</button>
+                    </form>
+                <?php endif; ?>
+            </div>
 
 <section class="rating-section">
     <div class="gamevault-rating">

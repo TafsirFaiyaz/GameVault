@@ -13,6 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
+    // Check if username or email already exists in the database
+    $checkQuery = "SELECT * FROM users WHERE username = '$username' OR email = '$email'";
+    $result = mysqli_query($conn, $checkQuery);
+    
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        if ($row['username'] === $username) {
+            echo "Username already exists.";
+        } elseif ($row['email'] === $email) {
+            echo "Email already exists.";
+        }
+        exit();
+    }
+
     // Check if file is uploaded
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
         $fileTmpPath = $_FILES['profile_image']['tmp_name'];
@@ -41,14 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         } else {
             echo "Unsupported file extension.";
+            exit();
         }
     } else {
-        echo "No file uploaded or file upload error.";
+        echo "No profile picture was uploaded or file upload error.";
+        exit();
     }
 
-    // Hash the password and insert user data into database
+    // Hash the password and insert user data into the database
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     $query = "INSERT INTO users (username, email, password, profile_image) VALUES ('$username', '$email', '$hashedPassword', '$fileName')";
+    
     if (mysqli_query($conn, $query)) {
         echo "Registration successful. <a href='login.php'>Login here</a>";
     } else {
@@ -56,4 +73,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-

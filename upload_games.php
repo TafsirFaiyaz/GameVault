@@ -1,16 +1,27 @@
 <?php
 
 include 'db_connect.php'; // Include your database connection
+ // Start the session to access session variables
 
-$user_id = $_SESSION['user_id']; 
+$user_id = $_SESSION['user_id'];
 
-$admin_query = "SELECT * FROM admin WHERE user_id = $user_id";
+// Fetch the username for non-admin users
+$user_query = "SELECT username FROM users WHERE id = ?";
+$stmt = $conn->prepare($user_query);
+$stmt->bind_param("i", $user_id); // Bind user_id
+$stmt->execute();
+$user_result = $stmt->get_result();
+$user = $user_result->fetch_assoc();
+$username = $user['username'];
+
+// Check if the user is an admin
+$admin_query = "SELECT * FROM admin WHERE user_id = ?";
 $stmt = $conn->prepare($admin_query);
+$stmt->bind_param("i", $user_id); // Bind user_id
 $stmt->execute();
 $admin_result = $stmt->get_result();
 
 $is_admin = $admin_result->num_rows > 0;
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
@@ -25,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $target_dir = "Assets/game_images/";
     $target_file = $target_dir . basename($image_name);
 
-
+    // Handle genre checkboxes
     $genre = $_POST['genre'];
     $action = isset($genre['action']) ? 1 : 0;
     $rpg = isset($genre['rpg']) ? 1 : 0;
@@ -34,40 +45,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mystery = isset($genre['mystery']) ? 1 : 0;
     $sports = isset($genre['sports']) ? 1 : 0;
 
-    if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-        // Use prepared statement for SQL query
-        if ($is_admin) {
-            $query = "INSERT INTO games (title, description, release_date, platform, developer, publisher, image_path, action, rpg, strategy, adventure, mystery, sports)
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        } else {
-            $query = "INSERT INTO games_request (title, description, release_date, platform, developer, publisher, image_path, action, rpg, strategy, adventure, mystery, sports)
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        }
-        
-        $stmt = $conn->prepare($query);
-        
-        // Bind parameters
-        $stmt->bind_param("ssssssssiiiii", $title, $description, $release_date, $platform, $developer, $publisher, $target_file, $action, $rpg, $strategy, $adventure, $mystery, $sports);
-        
-        // Execute the query
-        if ($stmt->execute()) {
-            if ($is_admin) {
-                echo "<script>alert('Game was successfully uploaded.'); window.location.href = 'index.php';</script>";
-            } else {
-                echo "<script>alert('Request has been sent for approval.'); window.location.href = 'index.php';</script>";
-            }
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-        // Close the statement
-        $stmt->close();
+    // Check if the game already exists
+    $check_query = "SELECT * FROM games WHERE title = ?";
+    $stmt = $conn->prepare($check_query);
+    $stmt->bind_param("s", $title);
+    $stmt->execute();
+    $check_result = $stmt->get_result();
+
+    if ($check_result->num_rows > 0) {
+        echo "<script>alert('A game with this title already exists.'); window.location.href = 'index.php';</script>";
     } else {
-        echo "Sorry, there was an error uploading the image.";
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            // Insert the data into the appropriate table based on admin status
+            if ($is_admin) {
+                $query = "INSERT INTO games (title, description, release_date, platform, developer, publisher, image_path, action, rpg, strategy, adventure, mystery, sports)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("ssssssssiiiii", $title, $description, $release_date, $platform, $developer, $publisher, $target_file, $action, $rpg, $strategy, $adventure, $mystery, $sports);
+            } else {
+                $query = "INSERT INTO games_request (title, description, release_date, platform, developer, publisher, image_path, action, rpg, strategy, adventure, mystery, sports, username)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("ssssssssiiiiis", $title, $description, $release_date, $platform, $developer, $publisher, $target_file, $action, $rpg, $strategy, $adventure, $mystery, $sports, $username);
+            }
+
+            // Execute the query
+            if ($stmt->execute()) {
+                if ($is_admin) {
+                    echo "<script>alert('Game was successfully uploaded.'); window.location.href = 'index.php';</script>";
+                } else {
+                    echo "<script>alert('Request has been sent for approval.'); window.location.href = 'index.php';</script>";
+                }
+            } else {
+                echo "Error: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
+        } else {
+            echo "Sorry, there was an error uploading the image.";
+        }
     }
 }
-
-
 ?>
+
 
 
 

@@ -198,13 +198,14 @@ $is_admin = $admin_result->num_rows > 0;
     <a href="user_profile.php">Profile</a>
     <a href="upload_games.php">Add a Game</a>
     <a href="upload_characters.php">Add a Character</a>
-    <a href="messages.php">Messages</a>
     <a href="friend_requests.php">Friend Requests</a>
     
     <!-- Admin Panel (only visible for admin users) -->
     <?php if ($is_admin): ?>
     <div class="admin-panel">
         <a href="admin_panel.php">Admin Panel</a>
+        <a href="admin_panel.php">Game Request</a>
+        <a href="admin_panel.php">Character Request</a>
     </div>
     <?php endif; ?>
 </div>

@@ -14,10 +14,11 @@ $result_games = $conn->query($sql_games);
 // Fetching characters
 $sql_characters = "SELECT c.id, c.name, c.image_path, AVG(r.rating) AS avg_rating
     FROM characters c
-    LEFT JOIN character_ratings r ON c.id = r.user_id
+    LEFT JOIN character_ratings r ON c.id = r.character_id
     GROUP BY c.id, c.name, c.image_path
     ORDER BY avg_rating DESC
     LIMIT 4";
+
 $result_characters = $conn->query($sql_characters);
 ?>
 
@@ -114,11 +115,7 @@ $result_characters = $conn->query($sql_characters);
         </div>
     </section>
 
-    <section id="community" class="community">
-        <h2>Join Our Community</h2>
-        <p>Engage with like-minded gamers, share your favorite moments, and stay updated on the latest news.</p>
-        <a href="#sign-up" class="cta-button">Join Now</a>
-    </section>
+
 
     <?php include 'footer.php'; ?>
 

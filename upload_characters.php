@@ -2,6 +2,25 @@
 
 include 'db_connect.php'; // Include your database connection
 
+$user_id = $_SESSION['user_id']; 
+
+$user_query = "SELECT username FROM users WHERE id = ?";
+$stmt = $conn->prepare($user_query);
+$stmt->bind_param("i", $user_id); // Bind user_id
+$stmt->execute();
+$user_result = $stmt->get_result();
+$user = $user_result->fetch_assoc();
+$username = $user['username'];
+
+// Prepare and execute the query to check if the user is an admin
+$admin_query = "SELECT * FROM admin WHERE user_id = ?";
+$stmt = $conn->prepare($admin_query);
+$stmt->bind_param("i", $user_id); // 'i' for integer (user_id)
+$stmt->execute();
+$admin_result = $stmt->get_result();
+
+$is_admin = $admin_result->num_rows > 0;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -13,26 +32,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $target_file = $target_dir . basename($image_name);
 
     if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-        // Insert game data into the database
-        $query = "INSERT INTO characters (name, description, game_title,image_path)
-                  VALUES ('$title', '$description','$platform', '$target_file')";
 
-        if (mysqli_query($conn, $query)) {
-            if ($_SESSION['role'] == 'admin') {
-                echo "<script>alert('Game was successfully uploaded.'); window.location.href = 'index.php';</script>";
-            } else {
-                echo "<script>alert('Request has been sent for approval.'); window.location.href = 'index.php';</script>";
-            }
+        // Prepare the INSERT query based on whether the user is an admin
+        if ($is_admin) {
+            $query = "INSERT INTO characters (name, description, game_title, image_path) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ssss", $title, $description, $platform, $target_file);
         } else {
-            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+            $query = "INSERT INTO characters_request (name, description, game_title, image_path, username) VALUES (?, ?, ?, ?,?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sssss", $title, $description, $platform, $target_file, $username);
         }
-    } else {
-        echo "Sorry, there was an error uploading the image.";
+
+
+            if ($stmt->execute()) {
+                if ($is_admin) {
+                    echo "<script>alert('Character was successfully uploaded.'); window.location.href = 'index.php';</script>";
+                    
+                } else {
+                    echo "<script>alert('Request has been sent for approval.'); window.location.href = 'index.php';</script>";
+                    
+                }
+            } else {
+                echo "Error: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
+        } else {
+            echo "Error preparing statement: " . $conn->error;
+        }
     }
-}
+
 ?>
-
-
 
 
 

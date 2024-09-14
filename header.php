@@ -204,8 +204,8 @@ $is_admin = $admin_result->num_rows > 0;
     <?php if ($is_admin): ?>
     <div class="admin-panel">
         <a href="admin_panel.php">Admin Panel</a>
-        <a href="admin_panel.php">Game Request</a>
-        <a href="admin_panel.php">Character Request</a>
+        <a href="request_process.php?type=game">Game Request</a>
+        <a href="request_process.php?type=character">Character Request</a>
     </div>
     <?php endif; ?>
 </div>

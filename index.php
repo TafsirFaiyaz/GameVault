@@ -104,16 +104,17 @@ $result_characters = $conn->query($sql_characters);
 </section>
 
 
-    <section id="genres" class="genres">
-        <h2>Explore by Genre</h2>
-        <div class="genre-list">
-            <div class="genre-item">Action</div>
-            <div class="genre-item">Adventure</div>
-            <div class="genre-item">RPG</div>
-            <div class="genre-item">Strategy</div>
-            <!-- Add more genres as needed -->
-        </div>
-    </section>
+<section id="genres" class="genres">
+    <h2>Explore by Genre</h2>
+    <div class="genre-list">
+        <!-- Make each genre item a clickable link with query parameters -->
+        <a href="genre_sorting.php" class="genre-item">Action</a>
+        <a href="genre_sorting.php" class="genre-item">Adventure</a>
+        <a href="genre_sorting.php" class="genre-item">RPG</a>
+        <a href="genre_sorting.php" class="genre-item">Sports</a>
+        <!-- Add more genres as needed -->
+    </div>
+</section>
 
 
 

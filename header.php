@@ -167,8 +167,7 @@ $is_admin = $admin_result->num_rows > 0;
             <li><a href="index.php">Home</a></li>
             <li><a href="game_sorted.php">Top Games</a></li>
             <li><a href="character_sorting.php">Top Characters</a></li>
-            <li><a href="#genres">Genres</a></li>
-            <li><a href="#community">Community</a></li>
+            <li><a href="genre_sorting.php">Genres</a></li>
             <li><a href="user_profile.php">Profile</a></li>
         </ul>
 

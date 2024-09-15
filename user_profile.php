@@ -63,7 +63,7 @@ while ($row = mysqli_fetch_assoc($result3)) {
             <img src="Assets/user_image/<?php echo htmlspecialchars($profile_image); ?>" alt="Profile Picture" class="profile-pic">
             <!-- Display the username -->
             <h2 class="username"><?php echo htmlspecialchars($username); ?></h2>
-            <button class="game-list-btn">Game List</button>
+            <button class="game-list-btn"><a href="user_game_list.php">Game List</a></button>
             <button class="friend-list-btn">Friend List</button>
         </div>
         

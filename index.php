@@ -29,6 +29,7 @@ $result_characters = $conn->query($sql_characters);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamevault - Discover & Rate Your Favorite Games</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=69446&format=png&color=000000">
 </head>
 <body>
 

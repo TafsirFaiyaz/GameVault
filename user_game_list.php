@@ -1,8 +1,10 @@
 <?php
 include 'db_connect.php'; // Include your MySQLi connection file
 
- // Start the session to access session variables
-$user_id = $_SESSION['user_id']; // Assuming the user is logged in
+// Start the session to access session variables
+
+// Get the user ID from the URL if available, otherwise use the logged-in user's ID
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : $_SESSION['user_id'];
 
 // Determine sorting option
 $sort_option = isset($_POST['sort_option']) ? $_POST['sort_option'] : 'completed';
@@ -154,7 +156,7 @@ a:hover {
         
         <!-- Sorting Form -->
         <form method="POST" action="">
-            <label for="sort_option" >Sort By:</label>
+            <label for="sort_option" class="sortedforted">Sort By:</label>
             <select name="sort_option" id="sort_option">
                 <option value="completed" <?php echo $sort_option == 'completed' ? 'selected' : ''; ?>>  Completed</option>
                 <option value="plan_to_play" <?php echo $sort_option == 'plan_to_play' ? 'selected' : ''; ?>>  Plan to Play</option>
@@ -170,7 +172,7 @@ a:hover {
                     <th>Title</th>
                     <?php if ($sort_option === 'completed'): ?>
                         <th>Gamevault Rating</th>
-                        <th>Your Rating</th>
+                        <th>User Rating</th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -178,7 +180,7 @@ a:hover {
                 <?php while ($game = mysqli_fetch_assoc($result)): ?>
                     <tr>
                         <td><img src="<?php echo $game['image_path']; ?>" alt="<?php echo $game['title']; ?>" class="game-img"></td>
-                        <td><a href="game_details.php?game_id=<?php echo $game['id']; ?>"><?php echo $game['title']; ?></a></td>
+                        <td><a href="game_details.php?game_id=<?php echo $game['id']; ?>&user_id=<?php echo $user_id; ?>"><?php echo $game['title']; ?></a></td>
                         
                         <?php if ($sort_option === 'completed'): ?>
                             <td>

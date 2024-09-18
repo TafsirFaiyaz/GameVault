@@ -1,8 +1,8 @@
 <?php
 
 include "db_connect.php";
-// Assuming you have the logged-in user_id
-$user_id = $_SESSION['user_id']; // or however you're managing sessions
+
+$user_id = $_SESSION['user_id']; 
 
 $sortOption = isset($_GET['sort']) ? $_GET['sort'] : 'top';
 
@@ -169,7 +169,7 @@ $charactersResult = mysqli_query($conn, $charactersQuery);
 <?php include "header.php"?>
 
 <div class="content-wrapper">
-    <!-- Sorting Form -->
+
     <form method="GET" id="sort-form">
         <label for="sort-options">Sort by:</label>
         <select name="sort" id="sort-options" onchange="document.getElementById('sort-form').submit()">
@@ -178,7 +178,6 @@ $charactersResult = mysqli_query($conn, $charactersQuery);
         </select>
     </form>
 
-    <!-- Character List Table -->
     <table>
         <thead>
             <tr>
@@ -193,7 +192,7 @@ $charactersResult = mysqli_query($conn, $charactersQuery);
         </thead>
         <tbody>
     <?php 
-    $rank = 1; // Initialize rank counter
+    $rank = 1; 
     while ($row = mysqli_fetch_assoc($charactersResult)): ?>
     <tr>
         <td data-label="Rank"><?php echo $rank++; ?></td>
@@ -203,7 +202,7 @@ $charactersResult = mysqli_query($conn, $charactersQuery);
                 <?php echo $row['name']; ?>
             </a>
         </td>
-        <td data-label="Game"><?php echo htmlspecialchars($row['game_title']); ?></td> <!-- Display Game Title -->
+        <td data-label="Game"><?php echo htmlspecialchars($row['game_title']); ?></td> 
         <td data-label="Character Rating"><?php echo number_format($row['avg_rating'], 1); ?></td>
         <td data-label="User Rating">
             <?php 

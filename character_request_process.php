@@ -1,11 +1,11 @@
 <?php
-// Include database connection
+
 include 'db_connect.php';
 
-// Get the name from the query string
+
 $name = isset($_GET['name']) ? $_GET['name'] : '';
 
-// Fetch the character request details based on the name
+
 $sql = "SELECT * FROM characters_request WHERE name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $name);
@@ -18,41 +18,40 @@ if (!$character) {
     exit;
 }
 
-// Handle form submission for Accept or Reject
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
 
     if ($action === 'accept') {
-        // Insert into the characters table
+   
         $sql = "INSERT INTO characters (name, game_title, image_path, description)
                 VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssss", $character['name'], $character['game_title'], $character['image_path'], $character['description']);
         $stmt->execute();
 
-        // Delete from characters_request table
+
         $sql = "DELETE FROM characters_request WHERE name = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $name);
         $stmt->execute();
 
-        // Redirect to request_process.php
+
         header("Location: request_process.php?type=character");
         exit;
     } elseif ($action === 'reject') {
-        // Delete from characters_request table
+
         $sql = "DELETE FROM characters_request WHERE name = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $name);
         $stmt->execute();
 
-        // Redirect to request_process.php
         header("Location: request_process.php?type=character");
         exit;
     }
 }
 
-// Close database connection
+
 
 ?>
 
@@ -129,7 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p><strong>Game Title:</strong> <?php echo htmlspecialchars($character['game_title']); ?></p>
         <p><strong>Description:    </strong> <?php echo htmlspecialchars($character['description']); ?></p>
 
-        <!-- Buttons for Accept and Reject -->
         <form method="post" action="">
             <input type="hidden" name="action" value="accept">
             <button type="submit" class="btn">Accept</button>

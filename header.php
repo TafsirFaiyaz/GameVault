@@ -24,6 +24,7 @@ $is_admin = $admin_result->num_rows > 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Common Header</title>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=69446&format=png&color=000000">
     <style>
         body {
             margin: 0;
@@ -198,6 +199,8 @@ $is_admin = $admin_result->num_rows > 0;
     <a href="upload_games.php">Add a Game</a>
     <a href="upload_characters.php">Add a Character</a>
     <a href="friend_requests.php">Friend Requests</a>
+    <a href="find_friends.php">Find Friends</a>
+    <a href="logout.php">Logout</a>
     
     <!-- Admin Panel (only visible for admin users) -->
     <?php if ($is_admin): ?>

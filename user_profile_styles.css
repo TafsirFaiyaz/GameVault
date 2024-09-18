@@ -120,13 +120,15 @@ body {
     border-radius: 8px;
     text-align: center;
     flex: 1 1 calc(20% - 10px); /* Adjusted size for more items per row */
-    max-width: 200px; /* Set a max width */
+    max-width: 150px; 
+    max-height: 350px;/* Set a max width */
 }
 
 .favourite-game-item img {
     border-radius: 4px;
-    max-width: 150px; /* Increased size */
-    max-height: 150px; /* Increased size */
+    max-width: 250px; /* Increased size */
+    max-height: 350px;
+    height: 200px; /* Increased size */
 }
 
 .favourite-game-item p {
@@ -166,4 +168,9 @@ body {
 
 .favourite-games .edit-btn:hover {
     background-color: #777;
+}
+
+.friend-list-btn a{
+    text-decoration: none;
+    color: white;
 }

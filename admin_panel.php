@@ -1,26 +1,24 @@
 <?php
-// Include database connection
+
 include 'db_connect.php';
 
-// Handle table selections
 $table = isset($_GET['table']) ? $_GET['table'] : null;
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Handle game removal
 if (isset($_POST['remove_game'])) {
     $game_id = $_POST['game_id'];
     $deleteGameQuery = "DELETE FROM games WHERE id = $game_id";
     mysqli_query($conn, $deleteGameQuery);
 }
 
-// Handle user removal
+
 if (isset($_POST['remove_user'])) {
     $user_id = $_POST['user_id'];
     $deleteUserQuery = "DELETE FROM users WHERE id = $user_id";
     mysqli_query($conn, $deleteUserQuery);
 }
 
-// Handle character removal
+
 if (isset($_POST['remove_character'])) {
     $character_id = $_POST['character_id'];
     $deleteCharacterQuery = "DELETE FROM characters WHERE id = $character_id";
@@ -35,18 +33,18 @@ if (isset($_POST['remove_character'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <style>
-        /* Add to your styles.css file */
+
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #2c2c2c; /* Dark background */
-    color: #f1f1f1; /* Light text color */
+    background-color: #2c2c2c; 
+    color: #f1f1f1; 
     margin: 0;
     padding: 0;
 }
 
 h1, h2 {
-    color: #f5a623; /* Gold color for headings */
+    color: #f5a623; 
     text-align: center;
 }
 
@@ -54,13 +52,13 @@ form {
     margin: 20px auto;
     max-width: 600px;
     padding: 10px;
-    background-color: #3a3a3a; /* Slightly lighter dark background for forms */
+    background-color: #3a3a3a; 
     border-radius: 8px;
 }
 
 label {
     font-weight: bold;
-    color: #f5a623; /* Gold color for labels */
+    color: #f5a623;
 }
 
 select, input[type="text"], button {

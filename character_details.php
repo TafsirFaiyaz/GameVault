@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-// Query to get character rank
+
 $rank_sql = "
     SELECT rank FROM (
         SELECT c.id, c.name, AVG(r.rating) AS avg_rating, 
@@ -48,7 +48,7 @@ $stmt->execute();
 $rank_result = $stmt->get_result();
 $char_rank = $rank_result->fetch_assoc()['rank'] ?? 'Not ranked';
 
-// Query to get average rating
+
 $avg_rating_sql = "SELECT AVG(rating) as avg_rating FROM character_ratings WHERE character_id = ?";
 $stmt = $conn->prepare($avg_rating_sql);
 $stmt->bind_param("i", $character_id);
@@ -56,10 +56,10 @@ $stmt->execute();
 $avg_rating_result = $stmt->get_result();
 $avg_rating = $avg_rating_result->fetch_assoc()['avg_rating'];
 
-// Set a default value if there are no ratings
+
 $avg_rating_display = $avg_rating ? round($avg_rating, 1) : 'No ratings yet';
 
-// Fetch the user's rating for the character
+
 $user_rating_sql = "SELECT rating FROM character_ratings WHERE user_id = ? AND character_id = ?";
 $stmt = $conn->prepare($user_rating_sql);
 $stmt->bind_param("ii", $user_id, $character_id);

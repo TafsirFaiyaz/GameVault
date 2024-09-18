@@ -1,11 +1,11 @@
 <?php
-// Include database connection
+
 include 'db_connect.php';
 
-// Get the title from the query string
+
 $title = isset($_GET['title']) ? $_GET['title'] : '';
 
-// Fetch the game request details based on the title
+
 $sql = "SELECT * FROM games_request WHERE title = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $title);
@@ -18,7 +18,7 @@ if (!$game) {
     exit;
 }
 
-// Determine the genres
+
 $genres = [];
 if ($game['action'] == 1) $genres[] = 'Action';
 if ($game['rpg'] == 1) $genres[] = 'RPG';
@@ -29,29 +29,28 @@ if ($game['mystery'] == 1) $genres[] = 'Mystery';
 
 $genres_list = implode(', ', $genres);
 
-// Handle form submission for Accept or Reject
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
 
     if ($action === 'accept') {
-        // Insert into the games table
+
         $sql = "INSERT INTO games (title, description, release_date, platform, developer, publisher, image_path, action, rpg, strategy, sports, adventure, mystery)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssssssssss", $game['title'], $game['description'], $game['release_date'], $game['platform'], $game['developer'], $game['publisher'], $game['image_path'], $game['action'], $game['rpg'], $game['strategy'], $game['sports'], $game['adventure'], $game['mystery']);
         $stmt->execute();
 
-        // Delete from games_request table
+
         $sql = "DELETE FROM games_request WHERE title = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $title);
         $stmt->execute();
 
-        // Redirect to request_process.php
         header("Location: request_process.php?type=game");
         exit;
     } elseif ($action === 'reject') {
-        // Delete from games_request table
+
         $sql = "DELETE FROM games_request WHERE title = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $title);
@@ -63,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Close database connection
 
 ?>
 

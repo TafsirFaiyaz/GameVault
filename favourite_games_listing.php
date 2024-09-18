@@ -1,10 +1,9 @@
 <?php
 include 'db_connect.php';
 
-// Assuming user ID is stored in session
 $user_id = $_SESSION['user_id'];
 
-// Handle form submission
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['remove_favorite'])) {
         $game_id = $_POST['game_id'];
@@ -12,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_query($conn, $delete_query);
     } else if(isset($_POST['add_favorite'])){
         $game_id = $_POST['game_id'];
-        // Check if user has less than 5 favorite games
+        // username ar fvrt game dekhbo
         $count_query = "SELECT COUNT(*) as count FROM favourite_games WHERE user_id = $user_id";
         $count_result = mysqli_query($conn, $count_query);
         if (!$count_result) {
@@ -32,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Fetch current favorite games
+
 $favorite_games_query = "
     SELECT g.id, g.title, g.image_path
     FROM favourite_games fg
@@ -41,14 +40,14 @@ $favorite_games_query = "
 ";
 $favorite_games_result = mysqli_query($conn, $favorite_games_query);
 
-// Create an array of favorite game IDs
+
 $favorite_game_ids = array();
 while ($favorite_game = mysqli_fetch_assoc($favorite_games_result)) {
     $favorite_game_ids[] = $favorite_game['id'];
 }
 mysqli_data_seek($favorite_games_result, 0);
 
-// Fetch all games for search, excluding favorites
+
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 $all_games_query = "
     SELECT id, title, image_path
@@ -174,7 +173,7 @@ $all_games_result = mysqli_query($conn, $all_games_query);
                 echo "<div class='game-item'>";
                 echo "<img src='" . htmlspecialchars($game['image_path']) . "' alt='" . htmlspecialchars($game['title']) . "'>";
                 echo "<p>" . htmlspecialchars($game['title']) . "</p>";
-                echo "<form method='POST'>"; // Form to remove a game
+                echo "<form method='POST'>"; 
                 echo "<input type='hidden' name='game_id' value='" . $game['id'] . "'>";
                 echo "<button type='submit' name='remove_favorite'>Remove</button>";
                 echo "</form>";
@@ -190,7 +189,7 @@ $all_games_result = mysqli_query($conn, $all_games_query);
                 echo "<div class='game-item'>";
                 echo "<img src='" . htmlspecialchars($game['image_path']) . "' alt='" . htmlspecialchars($game['title']) . "'>";
                 echo "<p>" . htmlspecialchars($game['title']) . "</p>";
-                echo "<form method='POST'>"; // Form to add a game to favorites
+                echo "<form method='POST'>"; 
                 echo "<input type='hidden' name='game_id' value='" . $game['id'] . "'>";
                 echo "<button type='submit' name='add_favorite'" . (mysqli_num_rows($favorite_games_result) >= 5 ? " disabled" : "") . ">Add to Favorites</button>";
                 echo "</form>";

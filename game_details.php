@@ -4,11 +4,9 @@ include 'db_connect.php';
 $userid = $_SESSION['user_id']; 
 $game_id = isset($_GET['game_id']) ? intval($_GET['game_id']) : 0;
 
-// Fetch the details of the selected game
 $sql = "SELECT g.title, g.image_path, g.description, g.platform, g.release_date, g.publisher FROM Games g WHERE g.id = $game_id";
 $result = $conn->query($sql);
 
-// Check if the game exists
 if ($result->num_rows > 0) {
     $game = $result->fetch_assoc();
 } else {
@@ -17,7 +15,6 @@ if ($result->num_rows > 0) {
 }
 
 
-// SQL query to fetch the game's rank based on its average rating
 $rank_sql = "
     SELECT rank FROM (
         SELECT g.id, g.title, AVG(r.rating) AS avg_rating, 
@@ -37,7 +34,7 @@ $avg_rating_sql = "SELECT AVG(rating) as avg_rating FROM ratings WHERE game_id =
 $avg_rating_result = $conn->query($avg_rating_sql);
 $avg_rating = $avg_rating_result->fetch_assoc()['avg_rating'];
 
-// Set a default value if there are no ratings
+
 $avg_rating_display = $avg_rating ? round($avg_rating, 1) : 'No ratings yet';
 
 // Fetch the user's rating for the game, if it exists
@@ -99,7 +96,7 @@ $playlist_result = $conn->query($check_playlist_sql);
             <p class="rating-score">Not Rated</p>
         <?php endif; ?>
 
-        <!-- Rating Form -->
+
         <form action="submit_rating.php" method="POST" class="rating-form">
             <label for="rating">Rate this game:</label>
             <select id="rating" name="rating" required>
@@ -114,7 +111,7 @@ $playlist_result = $conn->query($check_playlist_sql);
         </form>
     </div>
 
-    <!-- Playlist Button Below Rating Section -->
+
 
 </section>
 
@@ -135,6 +132,6 @@ $playlist_result = $conn->query($check_playlist_sql);
 </html>
 
 <?php
-// Close connection
+
 $conn->close();
 ?>
